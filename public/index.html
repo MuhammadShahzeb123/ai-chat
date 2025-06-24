@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepSeek Chat - Advanced AI Assistant</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><text y='20' font-size='20'>🤖</text></svg>">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-robot"></i>
+                    <span>DeepSeek Chat</span>
+                </div>
+                <button class="new-chat-btn" id="newChatBtn">
+                    <i class="fas fa-plus"></i>
+                    New Chat
+                </button>
+            </div>
+
+            <div class="sidebar-content">
+                <!-- AI Personalities Section -->
+                <div class="section">
+                    <h3><i class="fas fa-masks-theater"></i> AI Personalities</h3>
+                    <div class="personalities-grid" id="personalitiesGrid">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Recent Conversations -->
+                <div class="section">
+                    <h3><i class="fas fa-history"></i> Recent Chats</h3>
+                    <div class="conversations-list" id="conversationsList">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <button class="settings-btn" id="settingsBtn">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Chat Area -->
+        <div class="main-content">
+            <div class="chat-header">                <button type="button" class="sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar" aria-label="Toggle Sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="chat-info">
+                    <h2 id="chatTitle">Welcome to DeepSeek Chat</h2>
+                    <p id="chatSubtitle">Choose a personality to start chatting</p>
+                </div>
+                <div class="chat-actions">
+                    <button type="button" class="action-btn" id="exportBtn" title="Export Chat" aria-label="Export Chat">
+                        <i class="fas fa-download"></i>
+                    </button>
+                    <button type="button" class="action-btn" id="clearBtn" title="Clear Chat" aria-label="Clear Chat">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="chat-container">
+                <div class="messages-container" id="messagesContainer">
+                    <div class="welcome-screen" id="welcomeScreen">
+                        <div class="welcome-content">
+                            <div class="welcome-icon">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <h1>Welcome to DeepSeek Chat</h1>
+                            <p>Your advanced AI assistant with custom personalities</p>
+
+                            <div class="features-grid">
+                                <div class="feature-card">
+                                    <i class="fas fa-comments"></i>
+                                    <h3>Smart Conversations</h3>
+                                    <p>Engage in natural, context-aware dialogues</p>
+                                </div>
+                                <div class="feature-card">
+                                    <i class="fas fa-masks-theater"></i>
+                                    <h3>AI Personalities</h3>
+                                    <p>Choose from multiple specialized AI assistants</p>
+                                </div>
+                                <div class="feature-card">
+                                    <i class="fas fa-history"></i>
+                                    <h3>Conversation History</h3>
+                                    <p>Your chats are saved and easily accessible</p>
+                                </div>
+                                <div class="feature-card">
+                                    <i class="fas fa-bolt"></i>
+                                    <h3>Real-time Streaming</h3>
+                                    <p>Get responses as they're generated</p>
+                                </div>
+                            </div>
+
+                            <div class="quick-start">
+                                <h3>Quick Start</h3>
+                                <p>Select an AI personality from the sidebar to begin chatting</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-container">
+                    <div class="input-wrapper">                        <div class="input-actions">
+                            <button type="button" class="input-action-btn" id="attachBtn" title="Attach File" aria-label="Attach File">
+                                <i class="fas fa-paperclip"></i>
+                            </button>
+                        </div>
+                        <textarea
+                            id="messageInput"
+                            placeholder="Type your message here..."
+                            rows="1"
+                            maxlength="4000"
+                        ></textarea>
+                        <div class="input-controls">
+                            <div class="character-count">
+                                <span id="charCount">0</span>/4000
+                            </div>
+                            <button type="button" class="send-btn" id="sendBtn" disabled title="Send Message" aria-label="Send Message">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="input-footer">
+                        <div class="streaming-toggle">
+                            <label>
+                                <input type="checkbox" id="streamingToggle" checked>
+                                <span>Real-time streaming</span>
+                            </label>
+                        </div>
+                        <div class="model-info">
+                            <span>Powered by DeepSeek</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">            <div class="modal-header">
+                <h2>Settings</h2>
+                <button type="button" class="modal-close" id="closeSettingsModal" title="Close Settings" aria-label="Close Settings">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-section">
+                    <h3>Chat Settings</h3>
+                    <div class="setting-item">
+                        <label for="temperatureSlider">Response Creativity</label>
+                        <input type="range" id="temperatureSlider" min="0" max="1" step="0.1" value="0.7">
+                        <span id="temperatureValue">0.7</span>
+                    </div>
+                    <div class="setting-item">
+                        <label for="maxTokensInput">Max Response Length</label>
+                        <input type="number" id="maxTokensInput" min="100" max="4000" value="2000">
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Interface</h3>
+                    <div class="setting-item">
+                        <label>
+                            <input type="checkbox" id="darkModeToggle">
+                            Dark Mode
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <label>
+                            <input type="checkbox" id="autoScrollToggle" checked>
+                            Auto-scroll to latest message
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Data Management</h3>
+                    <button type="button" class="danger-btn" id="clearAllDataBtn">
+                        <i class="fas fa-trash"></i>
+                        Clear All Conversations
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Prompt Modal -->
+    <div class="modal" id="customPromptModal">
+        <div class="modal-content">            <div class="modal-header">
+                <h2>Create Custom AI Personality</h2>
+                <button type="button" class="modal-close" id="closeCustomPromptModal" title="Close Modal" aria-label="Close Modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="customPromptForm">
+                    <div class="form-group">
+                        <label for="promptId">ID (unique identifier)</label>
+                        <input type="text" id="promptId" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="promptName">Name</label>
+                        <input type="text" id="promptName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="promptDescription">Description</label>
+                        <input type="text" id="promptDescription">
+                    </div>
+                    <div class="form-group">
+                        <label for="promptIcon">Icon (emoji)</label>
+                        <input type="text" id="promptIcon" placeholder="🎭" maxlength="2">
+                    </div>
+                    <div class="form-group">
+                        <label for="promptContent">System Prompt</label>
+                        <textarea id="promptContent" rows="6" required
+                                placeholder="Define the AI's personality, behavior, and expertise..."></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" id="cancelCustomPrompt">Cancel</button>
+                        <button type="submit">Create Personality</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
